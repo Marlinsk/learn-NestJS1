@@ -3,56 +3,38 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
-  HttpStatus,
   Param,
   Post,
   Put,
-  Res,
 } from '@nestjs/common';
 
-import { response } from 'express';
+import { CoursesService } from './courses.service';
 
 @Controller('courses')
 export class CoursesController {
+  constructor(private readonly CoursesService: CoursesService) {}
   @Get('list')
-  findAll(@Res() response) {
-    return response.status(200).send('Listagem de cursos');
+  findAll() {
+    return this.CoursesService.findAll();
   }
 
-  //   Exemplo de declaração #1 com parametrização
-  //   @Get(':id')
-  //   findOne(@Param() params) {
-  //     return `Curso #${params.id}`;
-  //   }
-
-  // Exemplo de declaração #2 com desestruturação
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `Curso #${id}`;
+    return this.CoursesService.findOne(id);
   }
 
-  //   Exemplo de declaração #1
-  //   @Post('/create')
-  //   @HttpCode(HttpStatus.NO_CONTENT)
-  //   create(@Body('name') body) {
-  //     return body;
-  //   }
-
-  // Exemplo de declaração #2
   @Post('/create')
-  @HttpCode(HttpStatus.NO_CONTENT)
   create(@Body() body) {
-    return body;
+    return this.CoursesService.create(body);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() body) {
-    return `Atualização do Curso #${id}`;
+    return this.CoursesService.update(id, body);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return `Curso #${id} excluído`;
+    return this.CoursesService.remove(id);
   }
 }
